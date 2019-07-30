@@ -1,0 +1,83 @@
+.tables : affiches les tables
+.headers on : affiche le header
+.echo on : mode echo
+.mode column : affiche les colonnes
+
+
+1)Récupérer tous les albums
+
+SELECT * FROM albums;
+
+2)Récupérer tous les albums dont le titre contient "Great"
+
+SELECT * FROM albums
+WHERE Title LIKE '%Great%';
+
+3)Donner le nombre total d'albums contenus dans la base
+
+SELECT COUNT(DISTINCT AlbumId) FROM albums;
+
+4)Supprimer tous les albums dont le nom contient "music"
+
+TOUJOURS SECLECTIONNER AVANT POUR VOIR S'IL EN EXISTE, ET APRÈS, POUR VOIR SI ON LES A SUPPRIMER
+
+SELECT * FROM albums WHERE Title LIKE '%Great%';
+
+DELETE FROM albums WHERE Title='%music%';
+
+SELECT * FROM albums WHERE Title LIKE '%Great%';
+
+5)Récupérer tous les albums écrits par AC/DC
+
+SELECT * FROM artists
+JOIN albums ON albums.ArtistId = artists.ArtistId
+WHERE artists.Name = 'AC/DC';
+
+6)Récupérer tous les titres des albums de AC/DC
+
+SELECT artists.Name, albums.Title, tracks.Name
+FROM ((artists
+INNER JOIN albums ON albums.ArtistId = artists.ArtistId)
+INNER JOIN tracks ON tracks.AlbumId = albums.AlbumId)
+WHERE artists.Name = 'AC/DC'; 
+
+7)Récupérer la liste des titres de l'album "Let There Be Rock"
+
+SELECT albums.Name, tracks.Name
+FROM albums
+INNER JOIN albums ON albums.AlbumId = tracks.AlbumId
+WHERE albums.Title = 'Let There Be Rock';
+
+pb 'Error: ambiguous column name: albums.Title'
+
+SELECT albums.Title, tracks.Name
+FROM ((artists
+INNER JOIN albums ON albums.ArtistId = artists.ArtistId)
+INNER JOIN tracks ON tracks.AlbumId = albums.AlbumId)
+WHERE albums.Title = 'Let There Be Rock';
+
+Marche !!!
+
+8)Afficher le prix de cet album ainsi que sa durée totale
+
+SELECT tracks.Milliseconds, tracks.UnitPrice
+FROM albums
+INNER JOIN albums ON albums.AlbumId = tracks.AlbumId
+WHERE albums.Title = 'Let There Be Rock'
+SELECT SUM(Milliseconds) FROM tracks
+SELECT SUM(UnitPrice) FROM tracks;
+
+SELECT artists.Name, albums.Title, tracks.Milliseconds, tracks.UnitPrice
+FROM ((artists
+INNER JOIN albums ON albums.ArtistId = artists.ArtistId)
+INNER JOIN tracks ON tracks.AlbumId = albums.AlbumId)
+WHERE albums.Title = 'Let There Be Rock'
+SELECT SUM(Milliseconds) FROM tracks &&
+SELECT SUM(UnitPrice) FROM tracks;
+
+
+
+
+
+
+
